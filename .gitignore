@@ -1,0 +1,7 @@
+venv/
+alembic/
+alembic.ini
+.env
+Pipfile.lock
+__pycache__
+.DS_Store
