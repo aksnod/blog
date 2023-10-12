@@ -1,15 +1,16 @@
-from datetime import date
-from typing import Optional
+from datetime import datetime
 
 from pydantic import BaseModel
 from pydantic import root_validator
 
 
-class CreateBlog(BaseModel):
+class BaseBlog(BaseModel):
     title: str
-    slug: str
-    content: Optional[str] = None
+    content: str | None = None
+    slug: str | None = None
 
+
+class CreateBlog(BaseBlog):
     @root_validator(pre=True)
     def generate_slug(cls, values):
         if "title" in values:
@@ -17,7 +18,15 @@ class CreateBlog(BaseModel):
         return values
 
 
-class ShowBlog(BaseModel):
-    title: str
-    content: Optional[str]
-    created_at: date
+class Blog(BaseBlog):
+    id: int
+    created_at: str | datetime = datetime.now()
+    is_active: bool
+    author_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class UpdateBlog(CreateBlog):
+    pass

@@ -14,3 +14,4 @@ class User(Base):
     is_superuser = Column(Boolean(), default=False)
     is_active = Column(Boolean(), default=True)
     blogs = relationship("Blog", back_populates="author")
+    profile = relationship("Profile", uselist=False, back_populates="user")

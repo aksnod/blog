@@ -23,6 +23,8 @@ python-dotenv = "*"
 alembic = "*"
 passlib = {extras = ["bcrypt"], version = "*"}
 pre-commit = "*"
+python-jose = "*"
+python-multipart = "*"
 
 [dev-packages]
 
