@@ -13,8 +13,8 @@ from sqlalchemy.orm import Session
 from core.config import settings
 from core.hashing import Hasher
 from core.security import create_access_token
-from db.repository.user import create_new_user
-from db.repository.user import get_user
+from db.repository.repo_user import create_new_user
+from db.repository.repo_user import get_user
 from db.session import get_db
 from schemas.token import Token
 from schemas.user import UserBase

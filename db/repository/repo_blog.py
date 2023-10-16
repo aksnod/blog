@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from db.models.blog import Blog
+from db.models.model_blog import Blog
 from schemas.blog import CreateBlog
 from schemas.blog import UpdateBlog
 

@@ -9,9 +9,9 @@ from sqlalchemy.orm import Session
 
 from .route_login import get_current_user
 from core.utils import create_upload_file
-from db.models import user
-from db.repository.user import get_user
-from db.repository.user import update_profile
+from db.models import model_user
+from db.repository.repo_user import get_user
+from db.repository.repo_user import update_profile
 from db.session import get_db
 from schemas.profile import Profile
 from schemas.user import UserBlog
@@ -21,7 +21,7 @@ router = APIRouter()
 
 @router.get("/", response_model=UserBlog)
 def get_profile(
-    current_user: Annotated[user.User, Depends(get_current_user)],
+    current_user: Annotated[model_user.User, Depends(get_current_user)],
     db: Session = Depends(get_db),
 ):
     return get_user(current_user.email, db)
@@ -34,7 +34,7 @@ async def update_user_profile(
     last_name: Annotated[str | None, Form()] = None,
     address: Annotated[str | None, Form()] = None,
     file: Annotated[UploadFile, File(...)],
-    current_user: Annotated[user.User, Depends(get_current_user)],
+    current_user: Annotated[model_user.User, Depends(get_current_user)],
     db: Session = Depends(get_db),
 ):
     dest = await create_upload_file(file)

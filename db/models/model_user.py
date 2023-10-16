@@ -15,3 +15,4 @@ class User(Base):
     is_active = Column(Boolean(), default=True)
     blogs = relationship("Blog", back_populates="author")
     profile = relationship("Profile", uselist=False, back_populates="user")
+    comments = relationship("Comments", back_populates="user")

@@ -12,7 +12,7 @@ api_router.include_router(route_login.router, prefix="", tags=["login"])
 api_router.include_router(route_user.router, prefix="/user", tags=["users"])
 api_router.include_router(
     route_blog.router,
-    prefix="",
+    prefix="/blog",
     tags=["blogs"],
     dependencies=[Depends(get_current_user)],
 )

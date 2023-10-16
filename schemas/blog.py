@@ -3,6 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel
 from pydantic import root_validator
 
+from .comment import Comment
+
 
 class BaseBlog(BaseModel):
     title: str
@@ -30,3 +32,7 @@ class Blog(BaseBlog):
 
 class UpdateBlog(CreateBlog):
     pass
+
+
+class BlogComment(Blog):
+    comments: list[Comment]

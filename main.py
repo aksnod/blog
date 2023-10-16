@@ -15,7 +15,14 @@ def create_tables():
 
 
 def start_application():
-    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+    ENVIRONMENT = settings.env  # get current env name
+    print(ENVIRONMENT)
+    SHOW_DOCS_ENVIRONMENT = ("local", "dev")  # explicit list of allowed envs
+
+    app_configs = {"title": settings.PROJECT_NAME, "version": settings.PROJECT_VERSION}
+    if ENVIRONMENT not in SHOW_DOCS_ENVIRONMENT:
+        app_configs["openapi_url"] = None
+    app = FastAPI(**app_configs)
     create_tables()
     include_router(app)
     return app

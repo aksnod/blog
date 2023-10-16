@@ -7,22 +7,25 @@ from fastapi import status
 from sqlalchemy.orm import Session
 
 from .route_login import get_current_user
-from db.repository.blog import create_new_blog
-from db.repository.blog import delete
-from db.repository.blog import fetch_all_blog
-from db.repository.blog import fetch_blog
-from db.repository.blog import update
+from db.repository import repo_comment
+from db.repository.repo_blog import create_new_blog
+from db.repository.repo_blog import delete
+from db.repository.repo_blog import fetch_all_blog
+from db.repository.repo_blog import fetch_blog
+from db.repository.repo_blog import update
 from db.session import get_db
 from schemas.blog import Blog
+from schemas.blog import BlogComment
 from schemas.blog import CreateBlog
 from schemas.blog import UpdateBlog
+from schemas.comment import Comment
 from schemas.user import User
 
 
 router = APIRouter()
 
 
-@router.post("/blogs", response_model=Blog, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=Blog, status_code=status.HTTP_201_CREATED)
 async def create_blog(
     blog: CreateBlog,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -32,12 +35,12 @@ async def create_blog(
     return blog
 
 
-@router.get("/blogs", response_model=list[Blog])
+@router.get("", response_model=list[Blog])
 async def get_all_blog(db: Annotated[Session, Depends(get_db)]):
     return fetch_all_blog(db)
 
 
-@router.get("/blog/{blog_id}")
+@router.get("/{blog_id}", response_model=BlogComment)
 async def get_blog(
     blog_id: int,
     db: Session = Depends(get_db),
@@ -51,7 +54,7 @@ async def get_blog(
     return blog
 
 
-@router.put("/blog/{blog_id}")
+@router.put("/{blog_id}")
 async def update_blog(
     blog_id: int,
     blog: UpdateBlog,
@@ -61,10 +64,37 @@ async def update_blog(
     return update(blog_id, current_user.id, blog, db)
 
 
-@router.delete("/blog/{blog_id}")
+@router.delete("/{blog_id}")
 async def delete_blog(
     blog_id: int,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     return delete(blog_id, current_user.id, db)
+
+
+# comment routes
+@router.post("/comments/{blog_id}")
+async def add_blog_comment(
+    db: Annotated[Session, Depends(get_db)],
+    blog_id: int,
+    text: str,
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    return repo_comment.add_comment(db, blog_id, text, current_user.id)
+
+
+@router.post("/comments/{blog_id}/{comment_id}")
+def add_comments_comment(
+    db: Annotated[Session, Depends(get_db)],
+    blog_id: int,
+    comment_id: int,
+    text: str,
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    return repo_comment.add_comment(db, blog_id, text, current_user.id, comment_id)
+
+
+@router.get("/comments/{comment_id}", response_model=Comment)
+def get_comments(db: Annotated[Session, Depends(get_db)], comment_id: int):
+    return repo_comment.get_comment(db, comment_id)

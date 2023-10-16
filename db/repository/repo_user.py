@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
 from core.hashing import Hasher
-from db.models.profile import Profile
-from db.models.user import User
+from db.models.model_profile import Profile
+from db.models.model_user import User
 from schemas.user import UserCreate
 
 
